@@ -363,26 +363,25 @@ function updateScores() {
     incorrectCountEl.textContent = gameState.incorrectCount;
 }
 
-// Save game state to localStorage
+// Save game state to localStorage (only balloon count persists)
 function saveGameState() {
     const saveData = {
-        balloonCount: gameState.balloonCount,
-        correctCount: gameState.correctCount,
-        incorrectCount: gameState.incorrectCount
+        balloonCount: gameState.balloonCount
     };
     localStorage.setItem('balloonColorGame', JSON.stringify(saveData));
 }
 
-// Load game state from localStorage
+// Load game state from localStorage (only balloon count, scores reset each session)
 function loadGameState() {
     const saved = localStorage.getItem('balloonColorGame');
     if (saved) {
         const data = JSON.parse(saved);
         // Cap balloon count to number of available colors
         gameState.balloonCount = Math.min(data.balloonCount || 4, COLORS.length);
-        gameState.correctCount = data.correctCount || 0;
-        gameState.incorrectCount = data.incorrectCount || 0;
     }
+    // Scores always start at 0 on refresh
+    gameState.correctCount = 0;
+    gameState.incorrectCount = 0;
 }
 
 // Settings handlers

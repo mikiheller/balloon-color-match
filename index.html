@@ -10,19 +10,7 @@
 </head>
 <body>
     <div class="game-container">
-        <!-- Header with instructions and score -->
-        <header class="game-header">
-            <div class="color-prompt">
-                <span class="prompt-text">Pop the</span>
-                <span class="target-color" id="targetColor">RED</span>
-                <span class="prompt-text">balloon!</span>
-            </div>
-            <button class="speak-btn" id="speakBtn" aria-label="Hear the color">
-                🔊
-            </button>
-        </header>
-
-        <!-- Score tracker -->
+        <!-- Score tracker (top right) -->
         <div class="score-tracker">
             <div class="score correct">
                 <span class="score-icon">✓</span>
@@ -34,10 +22,22 @@
             </div>
         </div>
 
-        <!-- Settings button -->
+        <!-- Settings button (top left) -->
         <button class="settings-btn" id="settingsBtn" aria-label="Settings">
             ⚙️
         </button>
+
+        <!-- Color prompt (centered above balloons) -->
+        <div class="color-prompt-container">
+            <div class="color-prompt">
+                <span class="prompt-text">Pop the</span>
+                <span class="target-color" id="targetColor">RED</span>
+                <span class="prompt-text">balloon!</span>
+                <button class="speak-btn" id="speakBtn" aria-label="Hear the color">
+                    🔊
+                </button>
+            </div>
+        </div>
 
         <!-- Balloon container -->
         <div class="balloon-area" id="balloonArea">

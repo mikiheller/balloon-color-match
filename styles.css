@@ -44,20 +44,15 @@ body {
     overflow: hidden;
 }
 
-/* Header */
-.game-header {
+/* Color prompt container - positioned above balloons */
+.color-prompt-container {
     position: absolute;
-    top: 0;
+    top: 15%;
     left: 0;
     right: 0;
-    padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 15px;
     z-index: 10;
-    background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 100%);
-    padding-bottom: 40px;
 }
 
 .color-prompt {
@@ -68,8 +63,12 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
     gap: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
 .target-color {
@@ -162,17 +161,16 @@ body {
 /* Balloon area */
 .balloon-area {
     position: absolute;
-    top: 0;
+    top: 30%;
     left: 0;
     right: 0;
     bottom: 0;
-    padding-top: 120px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-content: center;
+    align-content: flex-start;
     gap: 20px;
-    padding: 120px 20px 40px;
+    padding: 20px;
 }
 
 /* Balloon styles */
@@ -505,44 +503,35 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
-    .game-header {
-        padding: 15px 10px;
-        padding-bottom: 30px;
+    .color-prompt-container {
+        top: 10%;
     }
     
-    .score-tracker {
-        top: auto;
-        bottom: 20px;
-        right: 20px;
-        flex-direction: row;
-    }
-    
-    .settings-btn {
-        top: auto;
-        bottom: 20px;
-        left: 20px;
+    .color-prompt {
+        padding: 12px 20px;
+        gap: 8px;
     }
     
     .balloon-area {
-        padding-top: 100px;
-        padding-bottom: 100px;
+        top: 25%;
     }
     
     .speak-btn {
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
     }
 }
 
 /* Landscape mode on mobile */
 @media (max-height: 500px) and (orientation: landscape) {
-    .game-header {
-        padding: 10px;
-        padding-bottom: 20px;
+    .color-prompt-container {
+        top: 5%;
     }
     
     .color-prompt {
         font-size: 1.2rem;
+        padding: 8px 20px;
     }
     
     .target-color {
@@ -555,6 +544,6 @@ body {
     }
     
     .balloon-area {
-        padding-top: 70px;
+        top: 25%;
     }
 }
