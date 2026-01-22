@@ -13,7 +13,8 @@ let gameState = {
     targetColor: null,
     balloonCount: 4,
     correctCount: 0,
-    incorrectCount: 0
+    incorrectCount: 0,
+    speakEnabled: true
 };
 
 // DOM Elements
@@ -29,7 +30,7 @@ const balloonCountDisplay = document.getElementById('balloonCountDisplay');
 const decreaseBtn = document.getElementById('decreaseBtn');
 const increaseBtn = document.getElementById('increaseBtn');
 const resetScoresBtn = document.getElementById('resetScoresBtn');
-const speakBtn = document.getElementById('speakBtn');
+const speakToggle = document.getElementById('speakToggle');
 
 // Audio context for buzzer sound
 let audioContext = null;
@@ -98,6 +99,8 @@ function playSuccess() {
 
 // Speak the color using Web Speech API
 function speakColor(color) {
+    if (!gameState.speakEnabled) return;
+    
     if ('speechSynthesis' in window) {
         // Cancel any ongoing speech
         speechSynthesis.cancel();
@@ -363,21 +366,24 @@ function updateScores() {
     incorrectCountEl.textContent = gameState.incorrectCount;
 }
 
-// Save game state to localStorage (only balloon count persists)
+// Save game state to localStorage (settings persist)
 function saveGameState() {
     const saveData = {
-        balloonCount: gameState.balloonCount
+        balloonCount: gameState.balloonCount,
+        speakEnabled: gameState.speakEnabled
     };
     localStorage.setItem('balloonColorGame', JSON.stringify(saveData));
 }
 
-// Load game state from localStorage (only balloon count, scores reset each session)
+// Load game state from localStorage (settings persist, scores reset each session)
 function loadGameState() {
     const saved = localStorage.getItem('balloonColorGame');
     if (saved) {
         const data = JSON.parse(saved);
         // Cap balloon count to number of available colors
         gameState.balloonCount = Math.min(data.balloonCount || 4, COLORS.length);
+        // Load speak setting (default to true if not set)
+        gameState.speakEnabled = data.speakEnabled !== undefined ? data.speakEnabled : true;
     }
     // Scores always start at 0 on refresh
     gameState.correctCount = 0;
@@ -388,6 +394,7 @@ function loadGameState() {
 function openSettings() {
     settingsPanel.classList.add('open');
     balloonCountDisplay.textContent = gameState.balloonCount;
+    updateSpeakToggle();
 }
 
 function closeSettings() {
@@ -417,13 +424,26 @@ function resetScores() {
     saveGameState();
 }
 
+// Toggle speak setting
+function toggleSpeak() {
+    gameState.speakEnabled = !gameState.speakEnabled;
+    updateSpeakToggle();
+    saveGameState();
+}
+
+// Update the speak toggle button UI
+function updateSpeakToggle() {
+    speakToggle.setAttribute('aria-pressed', gameState.speakEnabled);
+    speakToggle.querySelector('.toggle-label').textContent = gameState.speakEnabled ? 'ON' : 'OFF';
+}
+
 // Event listeners
 settingsBtn.addEventListener('click', openSettings);
 closeSettingsBtn.addEventListener('click', closeSettings);
 increaseBtn.addEventListener('click', increaseBalloonCount);
 decreaseBtn.addEventListener('click', decreaseBalloonCount);
 resetScoresBtn.addEventListener('click', resetScores);
-speakBtn.addEventListener('click', () => speakColor(gameState.targetColor));
+speakToggle.addEventListener('click', toggleSpeak);
 
 // Close settings when clicking outside
 settingsPanel.addEventListener('click', (e) => {

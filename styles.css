@@ -57,18 +57,15 @@ body {
 
 .color-prompt {
     font-family: 'Fredoka One', cursive;
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    font-size: clamp(1.8rem, 6vw, 3rem);
     color: var(--text-dark);
     text-align: center;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.85);
-    padding: 15px 30px;
-    border-radius: 50px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    align-items: baseline;
+    gap: 12px;
+    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
 }
 
 .target-color {
@@ -84,21 +81,26 @@ body {
 .target-color.blue { color: var(--blue); }
 .target-color.purple { color: var(--purple); }
 
-.speak-btn {
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    background: white;
+/* Toggle button for settings */
+.toggle-btn {
+    min-width: 70px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
 }
 
-.speak-btn:hover, .speak-btn:active {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+.toggle-btn[aria-pressed="true"] {
+    background: var(--success-green);
+    color: white;
+}
+
+.toggle-btn[aria-pressed="false"] {
+    background: #ccc;
+    color: #666;
 }
 
 /* Score tracker */
@@ -508,18 +510,11 @@ body {
     }
     
     .color-prompt {
-        padding: 12px 20px;
         gap: 8px;
     }
     
     .balloon-area {
         top: 25%;
-    }
-    
-    .speak-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
     }
 }
 
