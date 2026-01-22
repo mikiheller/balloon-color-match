@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Pop the Color!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header with instructions and score -->
+        <header class="game-header">
+            <div class="color-prompt">
+                <span class="prompt-text">Pop the</span>
+                <span class="target-color" id="targetColor">RED</span>
+                <span class="prompt-text">balloon!</span>
+            </div>
+            <button class="speak-btn" id="speakBtn" aria-label="Hear the color">
+                🔊
+            </button>
+        </header>
+
+        <!-- Score tracker -->
+        <div class="score-tracker">
+            <div class="score correct">
+                <span class="score-icon">✓</span>
+                <span class="score-value" id="correctCount">0</span>
+            </div>
+            <div class="score incorrect">
+                <span class="score-icon">✗</span>
+                <span class="score-value" id="incorrectCount">0</span>
+            </div>
+        </div>
+
+        <!-- Settings button -->
+        <button class="settings-btn" id="settingsBtn" aria-label="Settings">
+            ⚙️
+        </button>
+
+        <!-- Balloon container -->
+        <div class="balloon-area" id="balloonArea">
+            <!-- Balloons will be generated here -->
+        </div>
+
+        <!-- Confetti container -->
+        <div class="confetti-container" id="confettiContainer"></div>
+
+        <!-- Settings panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-content">
+                <h2>Settings</h2>
+                <div class="setting-item">
+                    <label for="balloonCount">Number of Balloons:</label>
+                    <div class="balloon-count-control">
+                        <button class="count-btn" id="decreaseBtn">−</button>
+                        <span class="count-display" id="balloonCountDisplay">4</span>
+                        <button class="count-btn" id="increaseBtn">+</button>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label>Reset Scores:</label>
+                    <button class="reset-btn" id="resetScoresBtn">Reset</button>
+                </div>
+                <button class="close-settings" id="closeSettingsBtn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

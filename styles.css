@@ -1,0 +1,514 @@
+/* Import a playful font */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;800&display=swap');
+
+:root {
+    --red: #FF4757;
+    --orange: #FF7F50;
+    --yellow: #FFD93D;
+    --green: #2ED573;
+    --blue: #3498DB;
+    --purple: #9B59B6;
+    
+    --bg-gradient-start: #87CEEB;
+    --bg-gradient-end: #E0F6FF;
+    --text-dark: #2C3E50;
+    --success-green: #27AE60;
+    --error-red: #E74C3C;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: -webkit-fill-available;
+    overflow: hidden;
+}
+
+/* Header */
+.game-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 100%);
+    padding-bottom: 40px;
+}
+
+.color-prompt {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    color: var(--text-dark);
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.target-color {
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+    transition: color 0.3s ease;
+}
+
+.target-color.red { color: var(--red); }
+.target-color.orange { color: var(--orange); }
+.target-color.yellow { color: var(--yellow); text-shadow: 2px 2px 0 rgba(0,0,0,0.15); }
+.target-color.green { color: var(--green); }
+.target-color.blue { color: var(--blue); }
+.target-color.purple { color: var(--purple); }
+
+.speak-btn {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.speak-btn:hover, .speak-btn:active {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Score tracker */
+.score-tracker {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+}
+
+.score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    padding: 8px 15px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-weight: 800;
+    font-size: clamp(1rem, 3vw, 1.3rem);
+}
+
+.score.correct .score-icon {
+    color: var(--success-green);
+}
+
+.score.incorrect .score-icon {
+    color: var(--error-red);
+}
+
+.score-value {
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Settings button */
+.settings-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    z-index: 10;
+}
+
+.settings-btn:hover, .settings-btn:active {
+    transform: rotate(90deg);
+}
+
+/* Balloon area */
+.balloon-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 120px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    gap: 20px;
+    padding: 120px 20px 40px;
+}
+
+/* Balloon styles */
+.balloon {
+    position: relative;
+    width: clamp(80px, 20vw, 120px);
+    height: clamp(100px, 25vw, 150px);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+.balloon:nth-child(2n) { animation-delay: -0.5s; }
+.balloon:nth-child(3n) { animation-delay: -1s; }
+.balloon:nth-child(4n) { animation-delay: -1.5s; }
+.balloon:nth-child(5n) { animation-delay: -2s; }
+.balloon:nth-child(6n) { animation-delay: -2.5s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.balloon-body {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    position: relative;
+    box-shadow: 
+        inset -15px -15px 30px rgba(0,0,0,0.15),
+        inset 20px 20px 30px rgba(255,255,255,0.3);
+}
+
+.balloon-body::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    width: 30%;
+    height: 30%;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    filter: blur(3px);
+}
+
+.balloon-body::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: inherit;
+    clip-path: polygon(50% 100%, 0 0, 100% 0);
+}
+
+.balloon-string {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(180deg, #888 0%, #aaa 100%);
+    transform-origin: top center;
+    animation: string-sway 2s ease-in-out infinite;
+}
+
+@keyframes string-sway {
+    0%, 100% { transform: translateX(-50%) rotate(3deg); }
+    50% { transform: translateX(-50%) rotate(-3deg); }
+}
+
+/* Balloon colors */
+.balloon.red .balloon-body { background: var(--red); }
+.balloon.orange .balloon-body { background: var(--orange); }
+.balloon.yellow .balloon-body { background: var(--yellow); }
+.balloon.green .balloon-body { background: var(--green); }
+.balloon.blue .balloon-body { background: var(--blue); }
+.balloon.purple .balloon-body { background: var(--purple); }
+
+/* Balloon hover/active states */
+.balloon:hover {
+    animation-play-state: paused;
+}
+
+.balloon:active {
+    transform: scale(0.95);
+}
+
+/* Wiggle animation for wrong answer */
+.balloon.wiggle {
+    animation: wiggle 0.5s ease-in-out;
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    20% { transform: translateX(-15px) rotate(-5deg); }
+    40% { transform: translateX(15px) rotate(5deg); }
+    60% { transform: translateX(-10px) rotate(-3deg); }
+    80% { transform: translateX(10px) rotate(3deg); }
+}
+
+/* Pop animation */
+.balloon.popping {
+    animation: pop 0.3s ease-out forwards;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.5; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+/* Confetti */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    animation: confetti-fall 3s ease-out forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Settings panel */
+.settings-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-panel.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.settings-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 90%;
+    width: 350px;
+    text-align: center;
+}
+
+.settings-content h2 {
+    font-family: 'Fredoka One', cursive;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.setting-item {
+    margin-bottom: 25px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.balloon-count-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.count-btn {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.count-btn:hover, .count-btn:active {
+    transform: scale(1.1);
+    background: #2980B9;
+}
+
+.count-display {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    min-width: 60px;
+}
+
+.reset-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    background: var(--error-red);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.reset-btn:hover, .reset-btn:active {
+    transform: scale(1.05);
+    background: #C0392B;
+}
+
+.close-settings {
+    padding: 15px 50px;
+    border: none;
+    border-radius: 30px;
+    background: var(--success-green);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.close-settings:hover, .close-settings:active {
+    transform: scale(1.05);
+    background: #219653;
+}
+
+/* Celebration overlay */
+.celebration-text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(3rem, 10vw, 5rem);
+    color: white;
+    text-shadow: 
+        3px 3px 0 var(--purple),
+        6px 6px 0 rgba(0,0,0,0.2);
+    z-index: 150;
+    pointer-events: none;
+    animation: celebrate 1s ease-out forwards;
+}
+
+@keyframes celebrate {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); }
+    50% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); }
+    70% { transform: translate(-50%, -50%) scale(0.9) rotate(-3deg); }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .game-header {
+        padding: 15px 10px;
+        padding-bottom: 30px;
+    }
+    
+    .score-tracker {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        flex-direction: row;
+    }
+    
+    .settings-btn {
+        top: auto;
+        bottom: 20px;
+        left: 20px;
+    }
+    
+    .balloon-area {
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+    
+    .speak-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Landscape mode on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .game-header {
+        padding: 10px;
+        padding-bottom: 20px;
+    }
+    
+    .color-prompt {
+        font-size: 1.2rem;
+    }
+    
+    .target-color {
+        font-size: 1.5rem;
+    }
+    
+    .balloon {
+        width: 60px;
+        height: 75px;
+    }
+    
+    .balloon-area {
+        padding-top: 70px;
+    }
+}
