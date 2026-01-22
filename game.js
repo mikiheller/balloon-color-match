@@ -123,35 +123,93 @@ function speakColor(color) {
     }
 }
 
-// Create confetti burst
-function createConfetti() {
-    const colors = ['#FF4757', '#FF7F50', '#FFD93D', '#2ED573', '#3498DB', '#9B59B6', '#FF6B9D'];
-    const shapes = ['square', 'circle'];
+// Create explosive confetti burst from balloon position
+function createConfetti(balloonElement) {
+    const colors = ['#FF4757', '#FF7F50', '#FFD93D', '#2ED573', '#3498DB', '#9B59B6', '#FF6B9D', '#FF1493', '#00CED1', '#FFD700'];
+    const shapes = ['square', 'circle', 'triangle'];
     
-    for (let i = 0; i < 50; i++) {
+    // Get balloon position for explosion origin
+    const rect = balloonElement.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+    
+    // Create LOTS of confetti pieces - explosive burst!
+    const confettiCount = 150;
+    
+    for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
-        confetti.className = 'confetti';
+        confetti.className = 'confetti-piece';
         
         const color = colors[Math.floor(Math.random() * colors.length)];
         const shape = shapes[Math.floor(Math.random() * shapes.length)];
-        const left = Math.random() * 100;
-        const delay = Math.random() * 0.5;
-        const size = Math.random() * 10 + 5;
+        const size = Math.random() * 15 + 8;
+        
+        // Random explosion angle and distance
+        const angle = (Math.random() * 360) * (Math.PI / 180);
+        const velocity = Math.random() * 400 + 200;
+        const endX = Math.cos(angle) * velocity;
+        const endY = Math.sin(angle) * velocity - 200; // Bias upward
+        
+        // Random rotation
+        const rotation = Math.random() * 720 - 360;
+        
+        let borderRadius = '0';
+        let clipPath = 'none';
+        if (shape === 'circle') {
+            borderRadius = '50%';
+        } else if (shape === 'triangle') {
+            clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+        }
         
         confetti.style.cssText = `
-            left: ${left}%;
-            top: -20px;
+            position: fixed;
+            left: ${originX}px;
+            top: ${originY}px;
             width: ${size}px;
             height: ${size}px;
             background: ${color};
-            border-radius: ${shape === 'circle' ? '50%' : '0'};
-            animation-delay: ${delay}s;
+            border-radius: ${borderRadius};
+            clip-path: ${clipPath};
+            pointer-events: none;
+            z-index: 1000;
+            --end-x: ${endX}px;
+            --end-y: ${endY}px;
+            --rotation: ${rotation}deg;
+            animation: confetti-explode ${Math.random() * 0.5 + 1}s cubic-bezier(0, 0.5, 0.5, 1) forwards;
+            animation-delay: ${Math.random() * 0.1}s;
         `;
         
         confettiContainer.appendChild(confetti);
         
         // Remove after animation
-        setTimeout(() => confetti.remove(), 3500);
+        setTimeout(() => confetti.remove(), 2000);
+    }
+    
+    // Add some sparkle/star particles too
+    for (let i = 0; i < 30; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.textContent = '✨';
+        
+        const angle = (Math.random() * 360) * (Math.PI / 180);
+        const velocity = Math.random() * 300 + 150;
+        const endX = Math.cos(angle) * velocity;
+        const endY = Math.sin(angle) * velocity - 150;
+        
+        sparkle.style.cssText = `
+            position: fixed;
+            left: ${originX}px;
+            top: ${originY}px;
+            font-size: ${Math.random() * 20 + 15}px;
+            pointer-events: none;
+            z-index: 1001;
+            --end-x: ${endX}px;
+            --end-y: ${endY}px;
+            animation: sparkle-explode ${Math.random() * 0.3 + 0.8}s ease-out forwards;
+        `;
+        
+        confettiContainer.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 1500);
     }
 }
 
@@ -252,15 +310,17 @@ function handleBalloonClick(e) {
         updateScores();
         saveGameState();
         
-        balloon.classList.add('popping');
+        // Explode confetti FROM the balloon before it pops!
+        createConfetti(balloon);
         playSuccess();
-        createConfetti();
         showCelebration();
+        
+        balloon.classList.add('popping');
         
         // Start new round after animation
         setTimeout(() => {
             newRound();
-        }, 1000);
+        }, 1200);
     } else {
         // Wrong!
         gameState.incorrectCount++;
